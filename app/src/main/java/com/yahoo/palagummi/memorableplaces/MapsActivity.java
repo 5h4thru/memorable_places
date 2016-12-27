@@ -47,7 +47,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         if(title != "Your Location") {
             mMap.addMarker(new MarkerOptions().position(userLocation).title(title));
         }
-        mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(userLocation, 10));
+        mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(userLocation, 15));
     }
 
 
@@ -124,7 +124,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         mMap.setOnMapLongClickListener(this);
 
         Intent intent = getIntent();
-        if(intent.getIntExtra("placeNumber",0) == 0) {
+        if(intent.getIntExtra("placeNumber", 0) == -1) {
             locationManager = (LocationManager) this.getSystemService(Context.LOCATION_SERVICE);
             locationListener = new LocationListener() {
                 @Override
@@ -159,6 +159,18 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                     centerMapOnLocation(lastKnownLocation, "Your Location");
                 }
             }
+        } else {
+            // center map to the chosen location
+//            mMap.clear();
+//            mMap.addMarker(new MarkerOptions()
+//                    .position(MainActivity.location.get(intent.getIntExtra("placeNumber", 0)))
+//                    .title(MainActivity.places.get(intent.getIntExtra("placeNumber", 0))));
+            Location placeLocation = new Location(LocationManager.GPS_PROVIDER);
+            placeLocation.setLatitude(MainActivity.location.get(intent.getIntExtra("placeNumber", 0)).latitude);
+            placeLocation.setLongitude(MainActivity.location.get(intent.getIntExtra("placeNumber", 0)).longitude);
+            System.out.println("\n\n\n\n\n\n\n\nTEST\n\n\n\n\n\n\n\n" + intent.getIntExtra("placeNumber", 0));
+            centerMapOnLocation(placeLocation,
+                    MainActivity.places.get(intent.getIntExtra("placeNumber", 0)));
         }
     }
 }

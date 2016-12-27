@@ -23,9 +23,8 @@ public class MainActivity extends AppCompatActivity {
 
     public void addNewPlace(View view) {
         Intent intent = new Intent(getApplicationContext(), MapsActivity.class);
-        System.out.println("\n\n\n\n\n\n\nPLACES SIZE\n\n\n\n\n" + places.size());
         int size = places.size();
-        intent.putExtra("placeNumber", 0);
+        intent.putExtra("placeNumber", -1);
         startActivity(intent);
     }
 
@@ -42,7 +41,9 @@ public class MainActivity extends AppCompatActivity {
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
-
+                Intent intent = new Intent(getApplicationContext(), MapsActivity.class);
+                intent.putExtra("placeNumber", i);
+                startActivity(intent);
             }
         });
     }

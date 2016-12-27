@@ -10,15 +10,16 @@
     <ImageView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        app:srcCompat="@drawable/memorablebackground"
+        app:srcCompat="@drawable/placesbackground"
         android:id="@+id/imageView"
         android:scaleType="fitXY" />
 
     <Button
-        android:text="Add a New Place"
+        android:text="+ New Memorable Place"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_centerHorizontal="true"
+        android:layout_marginTop="10dp"
         android:id="@+id/addNewPlace"
         android:onClick="addNewPlace" />
 
@@ -28,6 +29,7 @@
         android:layout_centerVertical="true"
         android:layout_centerHorizontal="true"
         android:layout_below="@id/addNewPlace"
+        android:layout_marginTop="10dp"
         android:id="@+id/listView"
         android:cacheColorHint="@color/cast_expanded_controller_background_color" />
 

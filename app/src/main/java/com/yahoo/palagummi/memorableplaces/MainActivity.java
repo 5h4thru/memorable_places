@@ -1,5 +1,6 @@
 package com.yahoo.palagummi.memorableplaces;
 
+import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
@@ -17,7 +18,10 @@ public class MainActivity extends AppCompatActivity {
 
 
     public void addNewPlace(View view) {
-
+        Intent intent = new Intent(getApplicationContext(), MapsActivity.class);
+        System.out.println("\n\n\n\n\n\n\nPLACES SIZE\n\n\n\n\n" + places.size());
+        intent.putExtra("placeNumber", places.size());
+        startActivity(intent);
     }
 
 
@@ -33,7 +37,7 @@ public class MainActivity extends AppCompatActivity {
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
-                
+
             }
         });
     }

@@ -46,8 +46,8 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         // show the marker if it is from saved location
         if(title != "Your Location") {
             mMap.addMarker(new MarkerOptions().position(userLocation).title(title));
-            mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(userLocation, 10));
         }
+        mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(userLocation, 10));
     }
 
 
@@ -70,9 +70,16 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         } else {
             // Let the title be datetime
             SimpleDateFormat sdf = new SimpleDateFormat("HH:mm yyyy/MM/dd");
-            String currDateTime = sdf.format(new Date());
-            mMap.addMarker(new MarkerOptions().position(latLng).title(currDateTime));
+            address = sdf.format(new Date());
+            mMap.addMarker(new MarkerOptions().position(latLng).title(address));
         }
+
+        // update the ArrayList of places
+        MainActivity.places.add(address);
+        MainActivity.location.add(latLng);
+        MainActivity.arrayAdapter.notifyDataSetChanged();
+
+        Toast.makeText(this, "Location saved", Toast.LENGTH_SHORT).show();
     }
 
 

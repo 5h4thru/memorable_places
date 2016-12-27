@@ -16,8 +16,9 @@ public class MainActivity extends AppCompatActivity {
 
 
     ListView listView;
-    ArrayList<String> places = new ArrayList<String>();
-    ArrayList<LatLng> location = new ArrayList<LatLng>();
+    static ArrayList<String> places = new ArrayList<String>();
+    static ArrayList<LatLng> location = new ArrayList<LatLng>();
+    static ArrayAdapter arrayAdapter;
 
 
     public void addNewPlace(View view) {
@@ -35,7 +36,7 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
 
         listView = (ListView) findViewById(R.id.listView);
-        ArrayAdapter arrayAdapter = new ArrayAdapter(getApplicationContext(), android.R.layout.simple_list_item_1, places);
+        arrayAdapter = new ArrayAdapter(getApplicationContext(), R.layout.custom_textview, places);
         listView.setAdapter(arrayAdapter);
 
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {

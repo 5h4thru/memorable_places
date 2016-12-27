@@ -8,6 +8,8 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
 
+import com.google.android.gms.maps.model.LatLng;
+
 import java.util.ArrayList;
 
 public class MainActivity extends AppCompatActivity {
@@ -15,12 +17,14 @@ public class MainActivity extends AppCompatActivity {
 
     ListView listView;
     ArrayList<String> places = new ArrayList<String>();
+    ArrayList<LatLng> location = new ArrayList<LatLng>();
 
 
     public void addNewPlace(View view) {
         Intent intent = new Intent(getApplicationContext(), MapsActivity.class);
         System.out.println("\n\n\n\n\n\n\nPLACES SIZE\n\n\n\n\n" + places.size());
-        intent.putExtra("placeNumber", places.size());
+        int size = places.size();
+        intent.putExtra("placeNumber", 0);
         startActivity(intent);
     }
 

@@ -1,9 +1,9 @@
 package com.yahoo.palagummi.memorableplaces;
 
-import android.*;
 import android.Manifest;
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.location.Address;
 import android.location.Geocoder;
@@ -11,12 +11,11 @@ import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
 import android.os.Build;
+import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.FragmentActivity;
-import android.os.Bundle;
 import android.support.v4.content.ContextCompat;
-import android.util.Log;
 import android.widget.Toast;
 
 import com.google.android.gms.maps.CameraUpdateFactory;
@@ -26,8 +25,8 @@ import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
 
-import java.io.IOException;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.Locale;
@@ -37,13 +36,15 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     private GoogleMap mMap;
     LocationManager locationManager;
     LocationListener locationListener;
+    SharedPreferences sharedPreferences;
+
 
 
     public void centerMapOnLocation(Location location, String title) {
         LatLng userLocation = new LatLng(location.getLatitude(), location.getLongitude());
         mMap.clear();
 
-        // show the marker if it is from saved location
+        // show the marker if it is from saved locations
         if(title != "Your Location") {
             mMap.addMarker(new MarkerOptions().position(userLocation).title(title));
         }
@@ -76,10 +77,31 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
 
         // update the ArrayList of places
         MainActivity.places.add(address);
-        MainActivity.location.add(latLng);
+        MainActivity.locations.add(latLng);
         MainActivity.arrayAdapter.notifyDataSetChanged();
 
         Toast.makeText(this, "Location saved", Toast.LENGTH_SHORT).show();
+
+        // save the locations to sharedPreferences
+        sharedPreferences = getApplicationContext().getSharedPreferences("SAVED_LOCATIONS", Context.MODE_PRIVATE);
+        try {
+            sharedPreferences.edit()
+                    .putString("places", ObjectSerializer.serialize(MainActivity.places))
+                    .apply();
+            // save the locations which are in LatLng by converting it to Strings of latitude and longitude
+            ArrayList<String> latitudes = new ArrayList<>();
+            ArrayList<String> longitudes = new ArrayList<>();
+            for (LatLng coordinates: MainActivity.locations) {
+                latitudes.add(String.valueOf(coordinates.latitude));
+                longitudes.add(String.valueOf(coordinates.longitude));
+            }
+            sharedPreferences.edit()
+                    .putString("locations_latitude", ObjectSerializer.serialize(latitudes));
+            sharedPreferences.edit()
+                    .putString("locations_longitude", ObjectSerializer.serialize(longitudes));
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
 
@@ -156,19 +178,19 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                 } else {
                     locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 0, 0, locationListener);
                     Location lastKnownLocation = locationManager.getLastKnownLocation(LocationManager.GPS_PROVIDER);
-                    centerMapOnLocation(lastKnownLocation, "Your Location");
+                    if(lastKnownLocation != null)   centerMapOnLocation(lastKnownLocation, "Your Location");
                 }
             }
         } else {
-            // center map to the chosen location
+            // center map to the chosen locations
 //            mMap.clear();
 //            mMap.addMarker(new MarkerOptions()
-//                    .position(MainActivity.location.get(intent.getIntExtra("placeNumber", 0)))
+//                    .position(MainActivity.locations.get(intent.getIntExtra("placeNumber", 0)))
 //                    .title(MainActivity.places.get(intent.getIntExtra("placeNumber", 0))));
             Location placeLocation = new Location(LocationManager.GPS_PROVIDER);
-            placeLocation.setLatitude(MainActivity.location.get(intent.getIntExtra("placeNumber", 0)).latitude);
-            placeLocation.setLongitude(MainActivity.location.get(intent.getIntExtra("placeNumber", 0)).longitude);
-            System.out.println("\n\n\n\n\n\n\n\nTEST\n\n\n\n\n\n\n\n" + intent.getIntExtra("placeNumber", 0));
+            placeLocation.setLatitude(MainActivity.locations.get(intent.getIntExtra("placeNumber", 0)).latitude);
+            placeLocation.setLongitude(MainActivity.locations.get(intent.getIntExtra("placeNumber", 0)).longitude);
+
             centerMapOnLocation(placeLocation,
                     MainActivity.places.get(intent.getIntExtra("placeNumber", 0)));
         }

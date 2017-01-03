@@ -44,10 +44,10 @@ public class MainActivity extends AppCompatActivity {
         // update the list with SAVED_LOCATIONS from sharedPreferences
         ArrayList<String> latitudes = new ArrayList<>();
         ArrayList<String> longitudes = new ArrayList<>();
-        //places.clear();
-        //latitudes.clear();
-        //longitudes.clear();
-        //locations.clear();
+        places.clear();
+        latitudes.clear();
+        longitudes.clear();
+        locations.clear();
         sharedPreferences = getApplicationContext().getSharedPreferences("SAVED_LOCATIONS", Context.MODE_PRIVATE);
         try {
             places = (ArrayList<String>) ObjectSerializer.
@@ -72,7 +72,7 @@ public class MainActivity extends AppCompatActivity {
             }
         }
 
-        arrayAdapter = new ArrayAdapter(getApplicationContext(), android.R.layout.simple_list_item_1, places);
+        arrayAdapter = new ArrayAdapter(getApplicationContext(), R.layout.custom_textview, places);
         listView.setAdapter(arrayAdapter);
 
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {

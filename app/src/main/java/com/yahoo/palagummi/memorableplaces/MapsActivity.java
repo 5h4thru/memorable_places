@@ -96,9 +96,9 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                 longitudes.add(String.valueOf(coordinates.longitude));
             }
             sharedPreferences.edit()
-                    .putString("locations_latitude", ObjectSerializer.serialize(latitudes));
+                    .putString("locations_latitude", ObjectSerializer.serialize(latitudes)).apply();
             sharedPreferences.edit()
-                    .putString("locations_longitude", ObjectSerializer.serialize(longitudes));
+                    .putString("locations_longitude", ObjectSerializer.serialize(longitudes)).apply();
         } catch (Exception e) {
             e.printStackTrace();
         }
